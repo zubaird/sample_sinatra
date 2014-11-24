@@ -1,3 +1,3 @@
 require './my_app'
 
-run MyApp.new
+run MyAppController.new

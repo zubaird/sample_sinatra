@@ -1,0 +1,11 @@
+<h1>Pick a Project to Delete</h1>
+
+<ul>
+  <% @projects.each do |project| %>
+  <li><%= project %></li>
+  <% end %>
+</ul>
+<form action="/remove" method="post">
+  <input type="text" name="project_name">
+  <input type="submit">
+</form>
