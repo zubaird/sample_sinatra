@@ -1,3 +1,7 @@
 update here
 
-<%= params[:message] %>
+<form action="/update" method="post">
+  Current Project Name: <input type="text" name="project_name">
+  New Project Name: <input type="text" name="new_project_name">
+  <input type="submit">
+</form>

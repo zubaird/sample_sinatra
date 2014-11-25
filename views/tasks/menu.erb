@@ -1,0 +1,14 @@
+<h1>Manage Project Tasks for "<%= params[:project_name] %>":</h1>
+<h3>The following commands are available</h3>
+<ol>
+<% print_task_menu(params[:project_name]).each do |option| %>
+<li><%= option %></li>
+<% end %>
+</ol>
+
+<form action="/tasks/menu" method="post">
+  <input type="text" name="task_message">
+  <input type="submit">
+</form>
+
+<% redirect_hack(params[:task_message]) %>

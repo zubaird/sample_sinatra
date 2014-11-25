@@ -1,10 +1,4 @@
-Test Project
-More Shit
-Even More
-more double
-extra shit
-Another
-Another Lame One
-Stupid project
-thing
-thing
+{:Chores=>["task 1", "task 2", "task 3"]}
+{:Bills=>["task A", "task B", "task C"]}
+{:"Another big one"=>["no tasks yet"]}
+{:"Another Major One"=>["no tasks yet"]}

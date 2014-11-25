@@ -1,11 +1,18 @@
-<h1>Create a new project</h1>
-Enter a new project name:
+<h1>Edit a Project</h1>
 
-<form action="/create" method="post">
+Projects List
+<ul>
+  <% @projects.each do |project| %>
+  <li><%= project %></li>
+  <% end %>
+</ul>
+
+Enter a project to edit:
+
+<form action="/tasks/menu" method="post">
   <input type="text" name="project_name">
   <input type="submit">
 </form>
-
 
 <h3>The following commands are available</h3>
 <ol>

@@ -1,6 +1,27 @@
-Projects List
-<ul>
-  <% @projects.each do |project| %>
-  <li><%= project %></li>
+<h1>Projects List</h1>
+
+<% @projects.each do |project| %>
+<div>
+  <% project.each do |k, v| %>
+  <h4><%= k %></h4>
+  <ul>
+    <%  v.each do |tasks| %>
+      <li><%= tasks %></li>
+    <% end %>
+  </ul>
   <% end %>
-</ul>
+</div>
+<% end %>
+
+
+<h3>The following commands are available</h3>
+<ol>
+  <% print_project_menu.each do |option| %>
+  <li><%= option %></li>
+  <% end %>
+</ol>
+
+<form action="/menu" method="post">
+  <input type="text" name="message">
+  <input type="submit">
+</form>

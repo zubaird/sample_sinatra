@@ -15,17 +15,12 @@ class MyAppController < Sinatra::Base
     redirect params[:message].to_sym
   end
 
-  get '/new' do
+  get '/new' do  # => this can be combined with /create
     erb :new
   end
 
   post '/new' do
-    erb :create
-  end
-
-  get '/create' do
-    @projects = file_read
-    erb :create
+    erb :list
   end
 
   post '/create' do
@@ -47,13 +42,62 @@ class MyAppController < Sinatra::Base
   post '/remove' do
     @projects = file_read
     project_delete(params[:project_name])
+    write_file
     erb :list
   end
 
+  get '/update' do
+    @projects = file_read
+    erb :update
+  end
+
+  post '/update' do
+    @projects = file_read
+    project_rename(params[:project_name], params[:new_project_name])
+    write_file
+    erb :list
+  end
+
+  get '/edit' do
+    @projects = file_read
+    erb :edit
+  end
+
+  post '/edit' do
+    @projects = file_read
+    erb :'tasks/menu'
+  end
+
+  get '/tasks/menu' do
+    @projects = file_read
+    erb :'tasks/menu'
+  end
+
+  post '/tasks/menu' do
+    @projects = file_read
+    redirect "tasks/#{params[:task_message]}"
+  end
+
+  get '/tasks/' do
+    erb :'tasks/list'
+  end
+
+
+
   helpers do
+
+    def redirect_hack(params)
+      @params = params
+    end
     # => Model helpers
+
+    def project_rename(old_name, new_name)
+      @projects.delete(old_name)
+      @projects << new_name
+    end
+
     def project_add(name)
-      @projects << name
+      @projects << {name.to_sym => ["no tasks yet"]}
       write_file
     end
 
@@ -70,13 +114,21 @@ class MyAppController < Sinatra::Base
     end
 
     def file_read
-      File.exist?('projects.txt') ? (File.open('projects.txt', 'r').read.split("\n")) : Array.new
+      if File.exist?('projects.txt')
+        tasks_list = []
+        File.foreach('projects.txt') do |line|
+          tasks_list << eval(line)
+        end
+        tasks_list
+      else
+        Array.new
+      end
     end
 
     def write_file
-      data_string = @projects.join("\n")
+      projects_listing = @projects
       File.open('projects.txt', 'w') do |f|
-        f.write(data_string)
+          f.write(projects_listing.join("\n"))
       end
     end
 
@@ -85,12 +137,27 @@ class MyAppController < Sinatra::Base
       @projects
     end
 
+    def print_tasks_list(tasks)
+      @tasks
+    end
+
+    def print_task_menu(project_name)
+      task_options = ["Editing Project: #{project_name} ",
+        "'list' to list tasks",
+        "'create' to create a new task",
+        "'edit' to edit a task",
+        "'complete' to complete a task and remove it from the list",
+      ]
+    end
+
     def print_project_menu
       menu_options = [
+        "'menu' to go to main menu",
         "'list' to list projects",
         "'new' to add a new project",
         "'remove' to remove a project",
         "'update' to update a project",
+        "'edit' to edit a project",
       ]
     end
 
