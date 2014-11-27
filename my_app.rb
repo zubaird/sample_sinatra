@@ -97,20 +97,27 @@ class MyAppController < Sinatra::Base
     end
 
     def project_add(name)
-      @projects << {name.to_sym => ["no tasks yet"]}
+      @projects << {:"#{name}"=> ["no tasks yet"]}
       write_file
     end
 
     def project_delete(name)
+      new_array = []
       if project_present?(name)
-        @projects.delete(name)
+        new_array = @projects.map! do |listing|
+          # delete(listing) if listing.keys.join == name
+          @projects.delete_at(listing.index) if listing[name.to_sym] == name.to_sym
+        end
+      @projects = new_array
       else
         "could not delete #{name}"
       end
     end
 
     def project_present?(name)
-      @projects.include?(name)
+      @projects.each do |listing|
+        listing[name.to_sym] == name
+      end
     end
 
     def file_read
@@ -128,7 +135,7 @@ class MyAppController < Sinatra::Base
     def write_file
       projects_listing = @projects
       File.open('projects.txt', 'w') do |f|
-          f.write(projects_listing.join("\n"))
+        f.write(projects_listing.join("\n"))
       end
     end
 
