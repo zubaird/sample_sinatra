@@ -1,1 +1,1 @@
-This Sinatra App uses CRUD to for a Todo app that was originally for command-line.
+This Sinatra App uses CRUD to build a Todo app that was originally for command-line.
