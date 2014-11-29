@@ -1,12 +1,8 @@
 <h1>Welcome!</h1>
 <h3>The following commands are available</h3>
+
 <ol>
-<% print_project_menu.each do |option| %>
-<li><%= option %></li>
+<% print_project_menu.map.with_index do |menu_item, index| %>
+	<li><a href="<%= print_menu_links[index] %>"><%= menu_item %></a></li>
 <% end %>
 </ol>
-
-<form action="/menu" method="post">
-  <input type="text" name="message">
-  <input type="submit">
-</form>

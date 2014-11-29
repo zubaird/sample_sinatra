@@ -1,9 +1,10 @@
 require 'sinatra'
+require "yaml"
 
 class MyAppController < Sinatra::Base
 
   get '/' do
-    'Hello World!'
+    erb :menu
   end
 
   get '/menu' do
@@ -16,6 +17,7 @@ class MyAppController < Sinatra::Base
   end
 
   get '/new' do  # => this can be combined with /create
+    @projects = file_read
     erb :new
   end
 
@@ -97,8 +99,8 @@ class MyAppController < Sinatra::Base
     end
 
     def project_add(name)
-      @projects << {:"#{name}"=> ["no tasks yet"]}
-      write_file
+      @projects << "#{name}: no tasks yet"
+      write_file(@projects)
     end
 
     def project_delete(name)
@@ -106,7 +108,7 @@ class MyAppController < Sinatra::Base
       if project_present?(name)
         new_array = @projects.map! do |listing|
           # delete(listing) if listing.keys.join == name
-          @projects.delete_at(listing.index) if listing[name.to_sym] == name.to_sym
+          @projects.delete_at(listing.index) if listing[name] == name
         end
       @projects = new_array
       else
@@ -120,28 +122,37 @@ class MyAppController < Sinatra::Base
       end
     end
 
+
     def file_read
-      if File.exist?('projects.txt')
-        tasks_list = []
-        File.foreach('projects.txt') do |line|
-          tasks_list << eval(line)
+      @projects = []
+      if File.exist?('projects.yml')
+        data = YAML.load_file('projects.yml')
+        if data != false
+          return data
+        else 
+          @projects
         end
-        tasks_list
-      else
-        Array.new
       end
     end
 
-    def write_file
-      projects_listing = @projects
-      File.open('projects.txt', 'w') do |f|
-        f.write(projects_listing.join("\n"))
+    def write_file(projects)
+      File.open('projects.yml', 'w') do |f|
+        f.write(make_yaml(projects))
       end
+    end
+
+    # => YAML HELPERS FOR EASIER USE :)
+    def load_yaml(project)
+      YAML.load(project)
+    end
+
+    def make_yaml(project)
+      YAML.dump(project)
     end
 
     # => View helpers
     def print_projects_list
-      @projects
+      @projects.delete_if { |x| x == ""}
     end
 
     def print_tasks_list(tasks)
@@ -165,6 +176,17 @@ class MyAppController < Sinatra::Base
         "'remove' to remove a project",
         "'update' to update a project",
         "'edit' to edit a project",
+      ]
+    end
+
+    def print_menu_links
+      menu_links = [
+        "menu",
+        "list",
+        "new",
+        "remove",
+        "update",
+        "edit",
       ]
     end
 

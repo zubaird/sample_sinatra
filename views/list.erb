@@ -1,18 +1,14 @@
 <h1>Projects List</h1>
 
-<% @projects.each do |project| %>
-<div>
-  <% project.each do |k, v| %>
-  <h4><%= k %></h4>
+<% if !file_read.empty? %>
   <ul>
-    <%  v.each do |tasks| %>
-      <li><%= tasks %></li>
+  <% file_read.each do |project| %>
+    <li><%= project %></li>
     <% end %>
   </ul>
-  <% end %>
-</div>
+<% else %>
+  <h2> No Projects Saved Yet </h2>
 <% end %>
-
 
 <h3>The following commands are available</h3>
 <ol>
