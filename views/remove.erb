@@ -1,11 +1,25 @@
 <h1>Pick a Project to Delete</h1>
 
-<ul>
+<% if !@projects.empty? %>
+  <ol>
   <% @projects.each do |project| %>
-  <li><%= project %></li>
+    <% project.each do |title, tasks|  %>
+      <li><h2><%= title %></h2></li>
+    <% end %>
   <% end %>
-</ul>
+  </ol>
+<% else %>
+  <h2> No Projects Saved Yet </h2>
+<% end %>
+
 <form action="/remove" method="post">
   <input type="text" name="project_name">
   <input type="submit">
 </form>
+
+
+<ol>
+  <% print_project_menu.map.with_index do |menu_item, index| %>
+    <li><a href="<%= print_menu_links[index] %>"><%= menu_item %></a></li>
+  <% end %>
+</ol>

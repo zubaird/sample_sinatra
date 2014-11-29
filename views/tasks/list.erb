@@ -1,1 +1,16 @@
-<h1>Task List</h1>
+<h1>Task List for "<%= params[:project_name] %>"</h1>
+
+
+
+
+
+<h1>Create a new task for "<%= params[:project_name] %>"</h1>
+
+Enter a new task name:
+<form action="/tasks/create" method="post">
+  <input type="text" name="task_name">
+  <input type="hidden" name="project_name" value="<%= params[:project_name] %>">
+  <input type="submit">
+</form>
+
+<%= params[:project_name] %>

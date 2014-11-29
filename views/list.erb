@@ -1,25 +1,23 @@
 <h1>Projects List</h1>
 
-<% if !file_read.empty? %>
-  <ul>
-  <% file_read.each do |project| %>
-    <li><%= project %></li>
+<% if !@projects.empty? %>
+  <ol>
+  <% @projects.each do |project| %>
+    <% project.each do |title, tasks|  %>
+      <li><h2><%= title %></h2></li>
+      <% tasks.each do |task| %>
+        <%= task %>
+      <% end %>
     <% end %>
-  </ul>
+  <% end %>
+  </ol>
 <% else %>
   <h2> No Projects Saved Yet </h2>
 <% end %>
 
-<h3>The following commands are available</h3>
 <ol>
-  <% print_project_menu.each do |option| %>
-  <li><%= option %></li>
+  <% print_project_menu.map.with_index do |menu_item, index| %>
+    <li><a href="<%= print_menu_links[index] %>"><%= menu_item %></a></li>
   <% end %>
 </ol>
 
-<form action="/menu" method="post">
-  <input type="text" name="message">
-  <input type="submit">
-</form>
-
-<%= params[:project_name] %>

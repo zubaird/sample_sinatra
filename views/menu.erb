@@ -2,7 +2,7 @@
 <h3>The following commands are available</h3>
 
 <ol>
-<% print_project_menu.map.with_index do |menu_item, index| %>
-	<li><a href="<%= print_menu_links[index] %>"><%= menu_item %></a></li>
-<% end %>
+	<% print_project_menu.map.with_index do |menu_item, index| %>
+		<li><a href="<%= print_menu_links[index] %>"><%= menu_item %></a></li>
+	<% end %>
 </ol>

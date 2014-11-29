@@ -44,7 +44,7 @@ class MyAppController < Sinatra::Base
   post '/remove' do
     @projects = file_read
     project_delete(params[:project_name])
-    write_file
+    write_file(@projects)
     erb :list
   end
 
@@ -56,7 +56,7 @@ class MyAppController < Sinatra::Base
   post '/update' do
     @projects = file_read
     project_rename(params[:project_name], params[:new_project_name])
-    write_file
+    write_file(@projects)
     erb :list
   end
 
@@ -67,22 +67,26 @@ class MyAppController < Sinatra::Base
 
   post '/edit' do
     @projects = file_read
-    erb :'tasks/menu'
-  end
-
-  get '/tasks/menu' do
-    @projects = file_read
-    erb :'tasks/menu'
-  end
-
-  post '/tasks/menu' do
-    @projects = file_read
-    redirect "tasks/#{params[:task_message]}"
-  end
-
-  get '/tasks/' do
     erb :'tasks/list'
   end
+
+  get '/tasks/list' do
+    @projects = file_read
+    erb :'tasks/list'
+  end
+
+  post '/tasks/list' do
+    erb :'tasks/list'
+    # @projects = file_read
+    # redirect "tasks/#{params[:task_message]}"
+  end
+
+  post '/tasks/create' do
+    @projects = file_read
+    add_task(params[:project_name], params[:task_name])
+    erb :'tasks/list'
+  end
+
 
 
 
@@ -93,32 +97,47 @@ class MyAppController < Sinatra::Base
     end
     # => Model helpers
 
-    def project_rename(old_name, new_name)
-      @projects.delete(old_name)
-      @projects << new_name
+    def add_task(project_name, task)
+      get_project = @projects.detect { |thing| thing.keys.join  == "#{project_name}" }
+      get_project_tasks = get_project[get_project.keys.join]
+      get_project_tasks << task
+      project_rename(project_name, project_name)
     end
 
-    def project_add(name)
-      @projects << "#{name}: no tasks yet"
+    def project_rename(old_name, new_name)
+      get_old_project = @projects.detect { |thing| thing.keys.join  == "#{old_name}" }
+      get_old_project_tasks = get_old_project[get_old_project.keys.join].join(", ")
+
+      @projects.each do |project|
+        if project == get_old_project
+          @projects.delete(project)
+          project_add(new_name, get_old_project_tasks)
+        end
+      end
+    end
+
+    def project_add(name, *tasks )
+      @projects << { "#{name}" => tasks}
       write_file(@projects)
     end
 
     def project_delete(name)
-      new_array = []
-      if project_present?(name)
-        new_array = @projects.map! do |listing|
-          # delete(listing) if listing.keys.join == name
-          @projects.delete_at(listing.index) if listing[name] == name
+        @projects.each.with_index do |listing, index|
+          listing.each do |key, value|
+            if key == name
+               @projects.delete_at(index)
+            end 
+          end
         end
-      @projects = new_array
-      else
-        "could not delete #{name}"
-      end
     end
 
     def project_present?(name)
-      @projects.each do |listing|
-        listing[name.to_sym] == name
+      @projects.each.with_index do |listing, index|
+          if @projects[index][name.to_sym].exists?
+            true
+          else
+            false
+          end
       end
     end
 
