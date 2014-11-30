@@ -1,5 +1,23 @@
 ---
-- thingy:
+- !ruby/object:Project
+  name: Sample Project
+  tasks:
   - no tasks yet
-- Picard:
-  - Shatner, Work, More WOrk
+- !ruby/object:Project
+  name: Sample Project
+  tasks:
+  - no tasks yet
+- !ruby/object:Project
+  name: Sample Project
+  tasks:
+  - no tasks yet
+- !ruby/object:Project {}
+- !ruby/object:Project
+  name: Kirk
+  tasks:
+  - no tasks yet
+  - Warp9
+- !ruby/object:Project
+  name: Sample Project
+  tasks:
+  - no tasks yet

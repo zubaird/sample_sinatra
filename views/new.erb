@@ -7,9 +7,4 @@ Enter a new project name:
 </form>
 
 
-<ol>
-  <% print_project_menu.map.with_index do |menu_item, index| %>
-    <li><a href="<%= print_menu_links[index] %>"><%= menu_item %></a></li>
-  <% end %>
-</ol>
-
+<%= erb(:menu_options_partial, :layout => false) %>

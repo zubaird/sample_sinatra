@@ -1,23 +1,13 @@
 <h1>Projects List</h1>
-
 <% if !@projects.empty? %>
-  <ol>
+
   <% @projects.each do |project| %>
-    <% project.each do |title, tasks|  %>
-      <li><h2><%= title %></h2></li>
-      <% tasks.each do |task| %>
-        <%= task %>
-      <% end %>
-    <% end %>
+  <h2><%= project.name %></h2>
+  <ol><li><%= project.tasks.join unless project.tasks.nil? %></li></ol>
   <% end %>
-  </ol>
+
 <% else %>
-  <h2> No Projects Saved Yet </h2>
+<h2> No Projects Saved Yet </h2>
 <% end %>
 
-<ol>
-  <% print_project_menu.map.with_index do |menu_item, index| %>
-    <li><a href="<%= print_menu_links[index] %>"><%= menu_item %></a></li>
-  <% end %>
-</ol>
-
+<%= erb(:menu_options_partial, :layout => false) %>

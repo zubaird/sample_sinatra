@@ -7,15 +7,15 @@ Projects List
   <% end %>
 </ul>
 
-Enter a project to edit:
+Select a project to edit:
 
 <form action="/tasks/list" method="post">
-  <input type="text" name="project_name">
+  <select name="project_name">
+    <% @projects.each do |project| %>
+    <option value="<%= project.keys.join %>"><%= project.keys.join %></option>
+    <% end %>
+  </select>
   <input type="submit">
 </form>
 
-<ol>
-  <% print_project_menu.map.with_index do |menu_item, index| %>
-    <li><a href="<%= print_menu_links[index] %>"><%= menu_item %></a></li>
-  <% end %>
-</ol>
+<%= erb(:menu_options_partial, :layout => false) %>
